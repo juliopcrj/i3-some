@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+import i3ipc
+import sys
+
+if len(sys.argv) < 2:
+    print(f'Usage: {sys.argv[0]} [move] workspace [num]')
+    sys.exit(-1)
+command = sys.argv[1] # go move
+argument = sys.argv[2] # 1 2 3 4...
+
+i3 = i3ipc.Connection()
+
+screens = {'DisplayPort-0':'0', # DP0 is central display, 
+           'DisplayPort-1':'1', # DP1 is left display
+           'HDMI-A-0':'2' # HDMI0 is right display
+           }
+
+workspaces = i3.get_workspaces()
+active = [i for i in workspaces if i.focused][0]
+output = screens[active.output]
+if argument == "0":
+    output = str(int(output)+1)
+else:
+    output = "" if output == "0" else output
+
+if command == "go":
+    i3.command(f'workspace {output}{argument}')
+elif command == "move":
+    i3.command(f'move container to workspace number {output}{argument}')
+elif command == "send":
+    # prefix = screens[argument]
+    #
+    # if prefix == "0":
+    #     prefix = ""
+    pass
