@@ -28,8 +28,6 @@ if command == "go":
 elif command == "move":
     i3.command(f'move container to workspace number {output}{argument}')
 elif command == "send":
-    # prefix = screens[argument]
-    #
-    # if prefix == "0":
-    #     prefix = ""
-    pass
+    destination = [work for work in workspaces if work.visible and work.output == argument][0]
+    i3.command(f'move container to workspace number {destination.num}')
+    i3.command(f'workspace {destination.num}')
